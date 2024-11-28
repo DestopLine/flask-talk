@@ -11,7 +11,7 @@ def login():
         if Nombre and Contraseña:
             return redirect(url_for("chat",user= Nombre))
         else:
-            return None  
+            return "INGRESAR DATOS VALIDOS"
     return render_template("index.html")
 
 @app.route("/chat")
