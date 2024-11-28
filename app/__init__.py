@@ -9,14 +9,15 @@ def login():
         Contraseña = request.form["password"]
         
         if Nombre and Contraseña:
-            return redirect(url_for("chat.html",user= Nombre))
+            return redirect(url_for("chat",user= Nombre))
         else:
             return None  
     return render_template("index.html")
 
 @app.route("/chat")
 def chat():
-    return render_template("chat.html")
+    user = request.args.get("Usuario","Usuario desconocido")
+    return render_template("chat.html",user=user)
 
 if __name__ == "__main__":
     app.run(debug=True)
