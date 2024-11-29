@@ -1,118 +1,91 @@
+/* Estilo global */
 body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    background: linear-gradient(150deg ,#6c3483, #58d68d);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
+    background: linear-gradient(135deg, #000ba5, #0087db);
 }
 
-.iniciar{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    background: white;
-    border-radius: 10px;
-}
-
-.iniciar h1{
+/* Contenedor del formulario */
+.iniciar {
+    background: #fff;
+    padding: 50px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 360px;
     text-align: center;
-    padding: 0 0 20px 0;
-    border-bottom: 1px solid silver;
 }
 
-.iniciar form{
-    padding: 0 40px ;
-    box-sizing: border-box;
+/* Título */
+.iniciar h1 {
+    font-size: 2rem;
+    color: #004169;
+    margin-bottom: 30px;
+    -webkit-text-stroke: 1px black;
 }
 
-form .Nombre{
+/* Input y etiquetas */
+.Nombre {
     position: relative;
-    border-bottom: 2px solid #adadad;
-    margin: 30px 0;
+    margin-bottom: 20px;
 }
 
-.Nombre input{
+.Nombre input {
     width: 100%;
-    padding: 0 5px;
-    height: 40px;
-    font-size: 16px;
-    border: none;
-    background: none;
+    padding: 10px 5px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f7f7f7;
+    transition: all 0.3s ease;
+}
+
+.Nombre input:focus {
+    border-color: #1da1f2;
+    background: #eef6fc;
     outline: none;
 }
 
-.Nombre label{
+.Nombre label {
     position: absolute;
     top: 50%;
     left: 5px;
-    color: #adadad;
     transform: translateY(-50%);
-    font-size: 16px;
+    font-size: 0.9rem;
+    color: #888;
     pointer-events: none;
+    transition: all 0.3s ease;
 }
 
-.Nombre span::before{
-    content: '';
-    position: absolute;
-    top: 40px;
-    left: 0;
+.Nombre input:focus + label,
+.Nombre input:not(:placeholder-shown) + label {
+    top: -8px;
+    font-size: 0.8rem;
+    color: #009dff;
+    background: #fff;
+    padding: 0 5px;
+    border-radius: 4px;
+}
+
+/* Botón de envío */
+input[type="submit"] {
     width: 100%;
-    height: 2px;
-    background: #6c3483;
-}
-
-.Nombre input:focus ~ label,
-.Nombre input:focus ~ label{
-    top: -5px;
-    color: #6c3483;
-}
-
-.Nombre input:focus ~ span::before,
-.Nombre input:focus ~ span::before{
-    width: 100%;
-}
-
-.recordar{
-    margin: -5px 0 20px 5px;
-    color: blue;
+    padding: 12px;
+    font-size: 1rem;
+    color: #000000;
+    background: #1da1f2;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.recordar:hover{
-    text-decoration: underline;
+input[type="submit"]:hover {
+    background: #0a85d1;
+    transform: scale(1.02);
 }
 
-input[type="submit"]{
-    width: 100%;
-    height: 50px;
-    border: 1px solid;
-    background: #6c3483;
-    border-radius: 25px;
-    font-size: 18px;
-    color: white;
-    cursor: pointer;
-    outline: none;
-}
-
-input[type="submit"]:hover{
-    border-color: purple;
-    transition: .5s;
-}
-
-.registrarse{
-    margin: 30px 0;
-    text-align: center;
-    font-size: 16px;
-    color: black;
-}
-
-.registrarse a{
-    color: blue;
-    text-decoration: none;
-}
-
-.registrarse a:hover{
-    text-decoration: underline;
-}
