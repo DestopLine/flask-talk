@@ -1,12 +1,21 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, redirect, render_template, request, url_for
 
-app = Flask(__name__)
+from app.entities import setup_db
 
-@app.route("/")
+flask_app = Flask(__name__)
+
+
+def main() -> None:
+    setup_db()
+    flask_app.run(debug=True)
+
+
+@flask_app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/login", methods=["GET","POST"])
+
+@flask_app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
@@ -17,9 +26,11 @@ def login():
             return "<h1>Intento de inicio de sesion fallido, intentar de nuevo</h1>"
     return render_template("login.html")
 
-@app.route("/post", methods=["POST"])
+
+@flask_app.route("/post", methods=["POST"])
 def create_post():
     return redirect(url_for("index"))
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    main()
