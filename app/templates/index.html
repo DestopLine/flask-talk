@@ -9,10 +9,10 @@
 <body>
     <h1>Bienvenidos a la app</h1>
     <form action="/post" method="post">
-        <textarea name="content" placeholder="What's on your mind?" required></textarea>
-        <button type="submit">Post</button>
+        <textarea name="content" placeholder="Escribe una publicacion" required></textarea>
+        <button type="submit">Publicar</button>
     </form>
-    <h2>Posts:</h2>
+    <h2>Publicaciones:</h2>
     <ul>
         {% for post in posts %}
             <li>{{ post }}</li>
