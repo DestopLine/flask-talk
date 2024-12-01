@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
+from flask_login import UserMixin
 from sqlalchemy import Column, ForeignKey, LargeBinary, Table, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -19,7 +20,7 @@ followers_table = Table(
 )
 
 
-class User(Base):
+class User(Base, UserMixin):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -34,11 +35,13 @@ class User(Base):
         secondary=followers_table,
         primaryjoin=id == followers_table.c.following_id,
         secondaryjoin=id == followers_table.c.follower_id,
+        overlaps="following, users"
     )
     following: Mapped[list["User"]] = relationship(
         secondary=followers_table,
         primaryjoin=id == followers_table.c.follower_id,
         secondaryjoin=id == followers_table.c.following_id,
+        overlaps="followers, users"
     )
     posts: Mapped[list["Post"]] = relationship(back_populates="user")
     comments: Mapped[list["Comment"]] = relationship(back_populates="user")
@@ -46,6 +49,9 @@ class User(Base):
 
     def __repr__(self) -> str:
         return f"User(id={self.id}, username={repr(self.username)})"
+
+    def get_id(self) -> str:
+        return str(self.id)
 
 
 post_likes_table = Table(
