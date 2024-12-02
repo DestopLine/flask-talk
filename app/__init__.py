@@ -34,7 +34,6 @@ def login():
                 login_user(user)
             next = request.args.get("next")
             return redirect(next or url_for("index"))
-
         else:
             return "<h1>Intento de inicio de sesion fallido, intentar de nuevo</h1>"
 
