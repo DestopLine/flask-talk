@@ -29,13 +29,16 @@ def login():
             with Session.begin() as session:
                 user = session.scalars(
                     select(User)
-                        .where(User.username == username and User.password == password)
-                ).first()
+                    .where((User.username == username) & (User.password == password))
+                    ).first()
                 login_user(user)
-            next = request.args.get("next")
-            return redirect(next or url_for("index"))
-        else:
-            return "<h1>Intento de inicio de sesion fallido, intentar de nuevo</h1>"
+                if user:
+                    login_user(user)
+                    next = request.args.get("next")
+                    return redirect(next or url_for("home"))
+                else:
+                    return "<h1>Intento de inicio de sesión fallido. Intenta de nuevo.</h1>"
+
 
     return render_template("login.html")
 
@@ -49,6 +52,7 @@ def home():
     return render_template("index.html",posts=posts)
 
 @flask_app.route("/post", methods=["POST"])
+@login_required
 def post():
     pass
 
