@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App</title>
+    <title>Página Principal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
 </head>
 <body>
     <h1>Bienvenidos a la app</h1>
     <form action="/post" method="post">
-        <textarea name="content" placeholder="Escribe una publicacion" required></textarea>
+        <textarea name="content" placeholder="Escribe una publicación" required></textarea>
         <button type="submit">Publicar</button>
     </form>
     <h2>Publicaciones:</h2>
     <ul>
         {% for post in posts %}
-            <li>{{ post }}</li>
+            <li>
+                <a href="/post/{{ post.id }}">{{ post.text }}</a>  
+                <!-- Muestra el texto del post y enlaza al detalle -->
+                <p>Publicado por <a href="/user/{{ post.user_id }}">{{ post.user.username }}</a></p>
+            </li>
         {% endfor %}
     </ul>
 </body>

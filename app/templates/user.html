@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de {{ user.username }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user.css') }}">
+</head>
+<body>
+    <h1>{{ user.username }}</h1>
+    <p>{{ user.bio }}</p> <!-- Biografía del usuario -->
+
+    <h2>Publicaciones:</h2>
+    <ul>
+        {% for post in user.posts %}
+            <li>
+                <a href="/post/{{ post.id }}">{{ post.text }}</a>
+                <!-- Muestra el texto del post y enlaza al detalle -->
+                <p>Publicado el {{ post.created_at }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
