@@ -3,27 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal</title>
+    <title>Inicio</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
 </head>
 <body>
-    <h1>Bienvenidos a la app</h1>
-    <form action="/home" method="post">
-        <textarea name="content" placeholder="Escribe una publicación" required></textarea>
-        <button type="submit">Publicar</button>
-    </form>
-    <h2>Publicaciones:</h2>
-    <ul>
-        {% for post in posts %}
-            <li>
-                <a href="/post/{{ post.id }}">{{ post.text }}</a>  
-                <!-- Muestra el texto del post y enlaza al detalle -->
-                <p>Publicado por <a href="/user/{{ post.user_id }}">{{ post.user.username }}</a></p>
-            </li>
-        {% endfor %}
-    </ul>
-    <form method="post" action="/logout">
-        <button type="submit">Cerrar sesión</button>
-    </form>
+    <div class="container">
+        <!-- Barra lateral izquierda -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="{{ current_user.avatar_url or url_for('static', filename='images/default_avatar.png') }}" alt="Avatar" class="avatar">
+                <p>{{ current_user.username }}</p>
+                <a href="/profile/{{ current_user.id }}">Mi perfil</a>
+            </div>
+            <ul class="menu">
+                <li><a href="{{ url_for('home') }}">Inicio</a></li>
+                <li>
+                    <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
+                        <button type="submit" class="logout-btn">Cerrar sesión</button>
+                    </form>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Feed principal -->
+        <main class="feed">
+            <header>
+                <h1>Inicio</h1>
+            </header>
+
+            <!-- Crear publicación -->
+            <section class="create-post">
+                <form action="{{ url_for('post') }}" method="post">
+                    <textarea name="content" placeholder="¿Qué estás pensando?" required></textarea>
+                    <button type="submit">Publicar</button>
+                </form>
+            </section>
+
+            <!-- Lista de publicaciones -->
+            <section class="posts">
+                {% for post in posts %}
+                <article class="post">
+                    <div class="post-header">
+                        <img src="{{ post.user.avatar_url or url_for('static', filename='images/default_avatar.png') }}" alt="Avatar" class="post-avatar">
+                        <div>
+                            <p class="username">{{ post.user.username }}</p>
+                            <p class="time">{{ post.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>{{ post.text }}</p>
+                        {% if post.image %}
+                        <img src="{{ post.image_url }}" alt="Imagen del post" class="post-image">
+                        {% endif %}
+                    </div>
+                    <div class="post-actions">
+                        <form action="/post/{{ post.id }}/like" method="post">
+                            <button type="submit" class="like-btn">❤️ {{ post.likes|length }}</button>
+                        </form>
+                        <button class="comment-btn" onclick="toggleComments('{{ post.id }}')">💬 Comentarios</button>
+                    </div>
+                    <!-- Sección de comentarios -->
+                    <div class="comments" id="comments-{{ post.id }}" style="display: none;">
+                        <form action="/post/{{ post.id }}/comment" method="post" class="add-comment">
+                            <textarea name="comment" placeholder="Escribe un comentario..." required></textarea>
+                            <button type="submit">Comentar</button>
+                        </form>
+                        {% for comment in post.comments %}
+                        <div class="comment">
+                            <p><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</p>
+                            <form action="/comment/{{ comment.id }}/like" method="post">
+                                <button type="submit" class="like-btn">❤️ {{ comment.likes|length }}</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </article>
+                {% endfor %}
+            </section>
+        </main>
+    </div>
+    <script>
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
 </body>
 </html>
+
