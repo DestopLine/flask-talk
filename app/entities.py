@@ -2,22 +2,14 @@ from datetime import datetime
 from typing import Optional
 
 from flask_login import UserMixin
-from sqlalchemy import Column, ForeignKey, LargeBinary, Table, create_engine, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
+from sqlalchemy import Column, ForeignKey, LargeBinary, Table, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-# Configuración inicial de la base de datos
-DATABASE_URL = "sqlite:///example.db"  # Cambia esto si usas otro motor de base de datos
-engine = create_engine(DATABASE_URL)
+from app.database import Base, db
 
 
-# Base para la ORM
-class Base(DeclarativeBase):
-    pass
-
-
-def setup_db():
-    """Crea las tablas en la base de datos."""
-    Base.metadata.create_all(engine)
+def setup_db() -> None:
+    Base.metadata.create_all(db)
 
 
 # Tablas intermedias
@@ -66,13 +58,13 @@ class User(Base, UserMixin):
         secondary=followers_table,
         primaryjoin=id == followers_table.c.following_id,
         secondaryjoin=id == followers_table.c.follower_id,
-        overlaps="following, users"
+        overlaps="following, users",
     )
     following: Mapped[list["User"]] = relationship(
         secondary=followers_table,
         primaryjoin=id == followers_table.c.follower_id,
         secondaryjoin=id == followers_table.c.following_id,
-        overlaps="followers, users"
+        overlaps="followers, users",
     )
     posts: Mapped[list["Post"]] = relationship(back_populates="user")
     comments: Mapped[list["Comment"]] = relationship(back_populates="user")
@@ -127,37 +119,3 @@ class Reply(Base):
     comment: Mapped[Comment] = relationship(back_populates="replies")
     user: Mapped[User] = relationship(back_populates="replies")
     likes: Mapped[list[User]] = relationship(secondary=reply_likes_table)
-
-
-# Flujo para poblar la base de datos
-def populate_data():
-    """Crea datos de ejemplo en la base de datos."""
-    with Session(engine) as session:
-        # Crear usuarios
-        user1 = User(username="johndoe", password="password123", displayname="John Doe")
-        user2 = User(username="janedoe", password="password456", displayname="Jane Doe")
-
-        # Crear un post
-        post1 = Post(user_id=1, text="Este es mi primer post!")
-
-        # Crear un comentario
-        comment1 = Comment(post_id=1, user_id=2, text="¡Buen post!")
-
-        # Crear una respuesta
-        reply1 = Reply(comment_id=1, user_id=1, text="¡Gracias por tu comentario!")
-
-        # Relacionar seguidores
-        user1.followers.append(user2)
-
-        # Dar like al post
-        post1.likes.append(user2)
-
-        # Guardar todo en la base de datos
-        session.add_all([user1, user2, post1, comment1, reply1])
-        session.commit()
-
-
-if __name__ == "__main__":
-    setup_db()
-    populate_data()
-    print("Base de datos configurada y poblada con datos de ejemplo.")

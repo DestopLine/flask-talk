@@ -1,9 +1,11 @@
 from flask import Flask, redirect, render_template, request, url_for
 from flask_login import login_required, login_user
+import flask_login
+from sqlalchemy import select
+
 from app.auth import setup_auth
 from app.database import Session
-from app.entities import User, setup_db, Post
-from sqlalchemy import select
+from app.entities import Post, User, setup_db
 
 flask_app = Flask(__name__)
 
@@ -29,40 +31,46 @@ def login():
             with Session.begin() as session:
                 user = session.scalars(
                     select(User)
-                    .where((User.username == username) & (User.password == password))
-                    ).first()
+                        .where(User.username == username and User.password == password)
+                ).first()
                 login_user(user)
-                if user:
-                    login_user(user)
-                    next = request.args.get("next")
-                    return redirect(next or url_for("home"))
-                else:
-                    return "<h1>Intento de inicio de sesión fallido. Intenta de nuevo.</h1>"
+
+            next = request.args.get("next")
+            return redirect(next or url_for("index"))
+
+        else:
+            return "<h1>Intento de inicio de sesion fallido, intentar de nuevo</h1>"
+
     return render_template("login.html")
 
 
-@flask_app.route("/registro", methods=["GET","POST"])
+@flask_app.route("/registro", methods=["GET", "POST"])
 def registro():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        confirmar_password = request.form["confirmar_password"]
-        if password != confirmar_password:
+        confirm_password = request.form["confirm_password"]
+        if password != confirm_password:
             return "<h1>Las contraseñas no coinciden</h1>"
-        elif password == confirmar_password:
-            with Session.begin() as session:
-                user = session.scalars(
-                    select(User)
-                    .where((User.username == username) & (User.password == confirmar_password))
-                ).first
-                login_user(user)
-                if user:
-                    login_user(user)
-                    next = request.args.get("next")
-                    return redirect(next or url_for("home"))
-                else:
-                    return "<h1>Intento de inicio de sesion fallido. Intenta de nuevo</h1>"
+
+        with Session.begin() as session:
+            existing_user = session.scalars(
+                select(User).where(User.username == username)
+            ).first()
+
+            if existing_user is not None:
+                return "<h1>El nombre de usuario especificado ya está en uso</h1>"
+
+            new_user = User(username=username, password=password)
+            session.add(new_user)
+            session.flush()
+            login_user(new_user)
+
+        next = request.args.get("next")
+        return redirect(next or url_for("home"))
+
     return render_template("registro.html")
+
 
 @flask_app.route("/home")
 @login_required
@@ -70,12 +78,21 @@ def home():
     with Session.begin() as session:
         stmt = select(Post)
         posts = session.scalars(stmt).all()
-    return render_template("index.html",posts=posts)
+        return render_template("index.html", posts=posts)
+
 
 @flask_app.route("/post", methods=["POST"])
 @login_required
 def post():
     pass
+
+
+@flask_app.route("/logout", methods=["POST"])
+@login_required
+def logout():
+    flask_login.logout_user()
+    return redirect(url_for("index"))
+
 
 if __name__ == "__main__":
     main()
