@@ -38,10 +38,31 @@ def login():
                     return redirect(next or url_for("home"))
                 else:
                     return "<h1>Intento de inicio de sesión fallido. Intenta de nuevo.</h1>"
-
-
     return render_template("login.html")
 
+
+@flask_app.route("/registro", methods=["GET","POST"])
+def registro():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        confirmar_password = request.form["confirmar_password"]
+        if password != confirmar_password:
+            return "<h1>Las contraseñas no coinciden</h1>"
+        elif password == confirmar_password:
+            with Session.begin() as session:
+                user = session.scalars(
+                    select(User)
+                    .where((User.username == username) & (User.password == confirmar_password))
+                ).first
+                login_user(user)
+                if user:
+                    login_user(user)
+                    next = request.args.get("next")
+                    return redirect(next or url_for("home"))
+                else:
+                    return "<h1>Intento de inicio de sesion fallido. Intenta de nuevo</h1>"
+    return render_template("registro.html")
 
 @flask_app.route("/home")
 @login_required
