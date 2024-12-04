@@ -1,7 +1,7 @@
 import flask_login
 from flask import Flask, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user
-
+from sqlalchemy import select
 from app.auth import setup_auth
 from app.database import Session
 from app.entities import Post, User, setup_db
@@ -106,6 +106,22 @@ def post():
         session.commit()  # Usar session.commit()
 
     return redirect(url_for("home"))
+
+@flask_app.route("/perfil/<int:user_id>", methods=["GET"])
+@login_required
+def perfil(user_id):
+    with Session.begin() as session:
+        user = session.get(User, user_id)
+        if not user:
+            return "<h1>Usuario no encontrado</h1>", 404
+
+        # Cargar las publicaciones del usuario
+        user_posts = session.scalars(
+            select(Post).where(Post.user_id == user_id).order_by(Post.created_at.desc())
+        ).all()
+
+        # Pasar un nuevo objeto user completamente gestionado por la sesión activa
+        return render_template("perfil.html", user=user, posts=user_posts)
 
 
 @flask_app.route("/logout", methods=["POST"])
