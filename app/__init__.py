@@ -34,6 +34,9 @@ def login():
                     .first()
                 )
 
+                if user is None:
+                    return "<h1>Usuario o contraseña incorrectos</h1>"
+
                 login_user(user)
             next = request.args.get("next")
             return redirect(next or url_for("index"))
