@@ -1,5 +1,6 @@
+from io import BytesIO
 import flask_login
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, send_file, url_for
 from flask_login import current_user, login_required, login_user
 from sqlalchemy import select
 from app.auth import setup_auth
@@ -129,6 +130,20 @@ def perfil(user_id):
 def logout():
     flask_login.logout_user()
     return redirect(url_for("index"))
+
+
+@flask_app.route("/avatar/<id>")
+def avatar(id: int):
+    with Session.begin() as session:
+        user = session.get(User, id)
+
+        if user is None:
+            return "User not found", 404
+
+        if user.avatar is None:
+            return send_file("static/images/default_avatar.png", mimetype="image/gif")
+
+        return send_file(BytesIO(user.avatar), mimetype="image/gif")
 
 
 if __name__ == "__main__":

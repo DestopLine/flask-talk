@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
+from flask import url_for
 from flask_login import UserMixin
 from sqlalchemy import Column, ForeignKey, LargeBinary, Table, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -75,6 +76,10 @@ class User(Base, UserMixin):
 
     def get_id(self) -> str:
         return str(self.id)
+
+    @property
+    def avatar_url(self) -> str:
+        return url_for("avatar", id=self.id)
 
 
 class Post(Base):
