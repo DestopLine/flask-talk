@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_login import LoginManager
-from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.entities import User
@@ -13,7 +12,8 @@ def setup_auth(app: Flask, DbSession: sessionmaker[Session]) -> None:
 
     def load_user(user_id: str) -> User | None:
         with DbSession.begin() as session:
-            return session.scalars(select(User).where(User.id == int(user_id))).first()
+            session.expire_on_commit = False
+            return session.query(User).where(User.id == user_id).first()
 
     login_manager.user_loader(load_user)
-    login_manager.login_view = "login" # type: ignore
+    login_manager.login_view = "login"  # type: ignore
