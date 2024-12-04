@@ -31,6 +31,7 @@
             {% else %}
                 <p>No tienes publicaciones aún.</p>
             {% endif %}
+            <a href="{{ url_for('preferencias', user_id=current_user.id) }}">Preferencias</a>
         </section>
     </div>
 </body>

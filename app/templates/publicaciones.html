@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la publicación</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/publicaciones.css') }}">
 </head>
 <body>
     <div class="container">
@@ -25,6 +25,7 @@
                     {% endif %}
                 </div>
             </section>
+
             <!-- Comentarios -->
             <section class="comments">
                 <h2>Comentarios</h2>
@@ -32,11 +33,16 @@
                 <div class="comment">
                     <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
                     <form action="/comment/{{ comment.id }}/like" method="post">
-                        <button type="submit" class="like-btn">❤️ {{ comment.likes|length }}</button>
+                        {% if current_user in comment.likes %}
+                        <button type="submit" class="like-btn liked">❤️ {{ comment.likes|length }}</button>
+                        {% else %}
+                        <button type="submit" class="like-btn">♡ {{ comment.likes|length }}</button>
+                        {% endif %}
                     </form>
                 </div>
                 {% endfor %}
             </section>
+
             <!-- Formulario para añadir comentario -->
             <section class="add-comment">
                 <form action="{{ url_for('publicaciones', post_id=post.id) }}" method="post">
@@ -48,3 +54,4 @@
     </div>
 </body>
 </html>
+

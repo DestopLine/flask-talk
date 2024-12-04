@@ -62,13 +62,15 @@
                         {% endif %}
                     </div>
                     <div class="post-actions">
-                        <!-- Botón de like -->
                         <form action="/post/{{ post.id }}/like" method="post">
-                            <button type="submit" class="like-btn">❤️ {{ post.likes|length }}</button>
+                            {% if current_user in post.likes %}
+                            <button type="submit" class="like-btn liked">❤️ {{ post.likes|length }}</button>
+                            {% else %}
+                            <button type="submit" class="like-btn">♡ {{ post.likes|length }}</button>
+                            {% endif %}
                         </form>
-                        <!-- Enlace para ver la publicación -->
                         <a href="{{ url_for('publicaciones', post_id=post.id) }}">Ver Publicacion</a>
-                    </div>
+                    </div>                    
                 </article>
                 {% endfor %}
             </section>

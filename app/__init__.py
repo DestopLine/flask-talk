@@ -142,6 +142,22 @@ def publicaciones(post_id):
         return render_template('publicaciones.html', post=post, comments=comments)
 
 
+@flask_app.route('/post/<int:post_id>/like', methods=['POST'])
+@login_required
+def like_post(post_id):
+    with Session.begin() as session:
+        post = session.get(Post, post_id)
+        if not post:
+            return "<h1>Publicación no encontrada</h1>", 404
+        # Verificar si el usuario ya ha dado like
+        if current_user in post.likes:
+            post.likes.remove(current_user)
+        else:
+            post.likes.append(current_user)
+        session.commit()
+    return redirect(url_for('home'))
+
+
 @flask_app.route("/logout", methods=["POST"])
 @login_required
 def logout():
