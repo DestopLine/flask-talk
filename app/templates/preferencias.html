@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+        <link href="{{ url_for('static', filename='styles/index.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="profile">
+            <form action="/preferencias" method="POST" enctype="multipart/form-data">
+                <img
+                    src="{{ current_user.avatar_url }}"
+                    alt="Foto de perfil del usuario"
+                    class="avatar"
+                >
+                <label for="avatar" >Seleccionar foto de perfil</label>
+                <br>
+                <input
+                    type="file"
+                    name="avatar"
+                    id="avatar"
+                    accept="image/png, image/jpeg"
+                    style="visibility: hidden;"
+                >
+
+                <p>@{{ current_user.username }}</p>
+
+                <label for="displayname">Nombre</label>
+                <input
+                    type="text"
+                    name="displayname"
+                    id="displayname"
+                    value="{{ current_user.displayname or '' }}"
+                    maxlength="30"
+                >
+                <br>
+
+                <label for="bio">Acerca de mí</label>
+                <textarea
+                    name="bio"
+                    id="bio"
+                    maxlength="150"
+                    size=""
+                >{{ current_user.bio or '' }}</textarea>
+                <br>
+
+                <input type="submit" value="Guardar">
+            </form>
+        </div>
+    </body>
+</html>

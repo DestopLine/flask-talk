@@ -149,7 +149,7 @@ def logout():
     return redirect(url_for("index"))
 
 
-@flask_app.route("/avatar/<id>")
+@flask_app.route("/avatar/<int:id>")
 def avatar(id: int):
     with Session.begin() as session:
         user = session.get(User, id)
@@ -161,6 +161,26 @@ def avatar(id: int):
             return send_file("static/images/default_avatar.png", mimetype="image/gif")
 
         return send_file(BytesIO(user.avatar), mimetype="image/gif")
+
+
+@flask_app.route("/preferencias", methods=["GET", "POST"])
+@login_required
+def preferencias():
+    if request.method == "GET":
+        return render_template("preferencias.html")
+
+    with Session.begin() as session:
+        user = session.get(User, current_user.id)
+        assert user is not None
+
+        user.displayname = request.form["displayname"] or None
+        user.bio = request.form["bio"] or None
+
+        avatar_file = request.files["avatar"] or None
+        if avatar_file is not None:
+            user.avatar = avatar_file.stream.read()
+
+    return "<h1>Cambios guardados exitosamente</h1>"
 
 
 if __name__ == "__main__":
