@@ -5,7 +5,7 @@ from flask_login import current_user, login_required, login_user
 from sqlalchemy import select
 from app.auth import setup_auth
 from app.database import Session
-from app.entities import Post, User, setup_db
+from app.entities import Post, User, Comment, setup_db
 
 flask_app = Flask(__name__)
 
@@ -123,6 +123,23 @@ def perfil(user_id):
 
         # Pasar un nuevo objeto user completamente gestionado por la sesión activa
         return render_template("perfil.html", user=user, posts=user_posts)
+
+
+@flask_app.route('/post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def publicaciones(post_id):
+    with Session.begin() as session:
+        post = session.get(Post, post_id)
+        if not post:
+            return "<h1>Publicación no encontrada</h1>", 404
+        if request.method == 'POST':
+            comment_text = request.form['comment']
+            new_comment = Comment(text=comment_text, user_id=current_user.id, post_id=post.id)
+            session.add(new_comment)
+            session.commit()
+            return redirect(url_for('publicaciones', post_id=post.id))
+        comments = session.query(Comment).filter_by(post_id=post.id).all()
+        return render_template('publicaciones.html', post=post, comments=comments)
 
 
 @flask_app.route("/logout", methods=["POST"])

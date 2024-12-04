@@ -66,36 +66,13 @@
                         <form action="/post/{{ post.id }}/like" method="post">
                             <button type="submit" class="like-btn">❤️ {{ post.likes|length }}</button>
                         </form>
-                        <!-- Botón de comentarios -->
-                        <button class="comment-btn" onclick="toggleComments('{{ post.id }}')">💬 Comentarios</button>
-                    </div>
-                    <!-- Sección de comentarios -->
-                    <div class="comments" id="comments-{{ post.id }}" style="display: none;">
-                        <form action="/post/{{ post.id }}/comment" method="post" class="add-comment">
-                            <textarea name="comment" placeholder="Escribe un comentario..." required></textarea>
-                            <button type="submit">Comentar</button>
-                        </form>
-                        {% for comment in post.comments %}
-                        <div class="comment">
-                            <p><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</p>
-                            <form action="/comment/{{ comment.id }}/like" method="post">
-                                <button type="submit" class="like-btn">❤️ {{ comment.likes|length }}</button>
-                            </form>
-                        </div>
-                        {% endfor %}
+                        <!-- Enlace para ver la publicación -->
+                        <a href="{{ url_for('publicaciones', post_id=post.id) }}">Ver Publicacion</a>
                     </div>
                 </article>
                 {% endfor %}
             </section>
         </main>
     </div>
-
-    <script>
-        // Función para mostrar/ocultar comentarios
-        function toggleComments(postId) {
-            const commentsSection = document.getElementById(`comments-${postId}`);
-            commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
-        }
-    </script>
 </body>
 </html>
