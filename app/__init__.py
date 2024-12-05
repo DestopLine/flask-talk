@@ -172,6 +172,20 @@ def like_post(post_id):
         session.commit()
     return redirect(url_for('home'))
 
+@flask_app.route("/post/<int:post_id>/like", methods=['POST'])
+@login_required
+def comments_likes(comment_id):
+    with Session.begin() as session:
+        comment = session.get(Comment, comment_id)
+        if not comment:
+            return "<h1>No hay comentarios</h1>"
+        if current_user in comment.likes:
+            comment.likes.remove(current_user)
+        else:
+            comment.likes.append(current_user)
+        session.commit()
+    return redirect(url_for("publicaciones"))
+
 
 @flask_app.route("/logout", methods=["POST"])
 @login_required
