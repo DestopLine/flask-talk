@@ -1,4 +1,4 @@
-<article class="post">
+<article class="post" data-post-id="{{ post.id }}">
     <div class="post-header">
         <img src="{{ post.user.avatar_url }}" alt="Avatar" class="post-avatar">
         <div>
@@ -21,6 +21,9 @@
                 <button type="submit" class="post-like-btn">♡ {{ post.likes|length }}</button>
             {% endif %}
         </form>
+        {% if current_user.id == post.user.id %}
+            <button type="button" class="post-delete-btn">Eliminar</button>
+        {% endif %}
         <a href="{{ url_for('publicaciones', post_id=post.id) }}">Ver Publicacion</a>
     </div>                    
 </article>

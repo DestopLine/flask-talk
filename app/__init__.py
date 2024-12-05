@@ -142,6 +142,22 @@ def publicaciones(post_id):
         return render_template('publicaciones.html', post=post, comments=comments)
 
 
+@flask_app.route("/post/<int:post_id>", methods=["DELETE"])
+@login_required
+def eliminar_post(post_id):
+    with Session.begin() as session:
+        post = session.get(Post, post_id)
+
+        if post is None:
+            return "<h1>Publicación no encontrada</h1>", 404
+
+        if current_user.id != post.user.id:
+            return "Solo el usuario que publicó el post puede eliminarlo", 403
+
+        session.delete(post)
+        return "Post eliminado", 200
+
+
 @flask_app.route('/post/<int:post_id>/like', methods=['POST'])
 @login_required
 def like_post(post_id):
