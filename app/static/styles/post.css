@@ -58,3 +58,7 @@
 .post-comment-btn:hover {
     color: #2980b9;
 }
+
+.hidden {
+    visibility: hidden;
+}

@@ -3,7 +3,12 @@
         <img src="{{ post.user.avatar_url }}" alt="Avatar" class="post-avatar">
         <div>
             <p class="post-username">{{ post.user.displayname or post.user.username }}</p>
-            <p class="post-time">{{ post.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+            <p class="post-time">
+                {{ post.created_at.strftime('%d/%m/%Y %H:%M') }}
+                {% if post.edited_at %}
+                    (Editado: {{ post.edited_at.strftime('%d/%m/%Y %H:%M') }})
+                {% endif %}
+            </p>
         </div>
     </div>
     <div class="post-content">
@@ -22,6 +27,7 @@
             {% endif %}
         </form>
         {% if current_user.id == post.user.id %}
+            <button type="button" class="post-edit-btn">Editar</button>
             <button type="button" class="post-delete-btn">Eliminar</button>
         {% endif %}
         <a href="{{ url_for('publicaciones', post_id=post.id) }}">Ver Publicacion</a>
