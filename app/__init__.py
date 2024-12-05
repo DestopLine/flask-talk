@@ -136,7 +136,6 @@ def publicaciones(post_id):
             comment_text = request.form['comment']
             new_comment = Comment(text=comment_text, user_id=current_user.id, post_id=post.id)
             session.add(new_comment)
-            session.commit()
             return redirect(url_for('publicaciones', post_id=post.id))
         comments = session.query(Comment).filter_by(post_id=post.id).all()
         return render_template('publicaciones.html', post=post, comments=comments)
