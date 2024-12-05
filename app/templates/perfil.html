@@ -16,7 +16,12 @@
             <h1>{{ user.username }}</h1>
             <p>Miembro desde: {{ user.created_at.strftime('%d/%m/%Y') }}</p>
         </section>
-
+        <!-- Botón para volver a la página de inicio -->
+        <div class="return-home">
+            <button href='{{url_for("home")}}'" class="return-home-btn">
+                Volver a Inicio
+            </button>
+        </div>
         <!-- Publicaciones del usuario -->
         <section class="user-posts">
             <h2>Mis publicaciones</h2>
@@ -29,6 +34,6 @@
             {% endif %}
             <a href="{{ url_for('preferencias', user_id=current_user.id) }}">Preferencias</a>
         </section>
-    </div>
+    </div>    
 </body>
 </html>

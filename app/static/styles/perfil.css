@@ -107,3 +107,31 @@ a:hover {
     color: #0056b3;
     text-decoration: underline;
 }
+
+
+/* Contenedor del botón de volver */
+.return-home {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Botón de volver a inicio */
+.return-home-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.return-home-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.return-home-btn:active {
+    background-color: #003f7f;
+}
