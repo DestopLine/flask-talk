@@ -1,0 +1,60 @@
+.post {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.post-username {
+    font-weight: bold;
+}
+
+.post-time {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.post-content p {
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
+.post-image {
+    max-width: 100%;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.post-like-btn,
+.post-comment-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #3498db;
+}
+
+.post-like-btn:hover,
+.post-comment-btn:hover {
+    color: #2980b9;
+}

@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de {{ user.username }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/perfil.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/post.css') }}">
 </head>
 <body>
     <div class="perfil-container">
         <!-- Información del perfil -->
         <section class="user-info">
-            <img src="{{ user.avatar_url or url_for('static', filename='images/default_avatar.png') }}" alt="Avatar" class="avatar">
+            <img src="{{ user.avatar_url }}" alt="Avatar" class="user-avatar">
             <h1>{{ user.username }}</h1>
             <p>Miembro desde: {{ user.created_at.strftime('%d/%m/%Y') }}</p>
         </section>
@@ -20,13 +21,7 @@
             <h2>Mis publicaciones</h2>
             {% if posts %}
                 {% for post in posts %}
-                <article class="post">
-                    <p>{{ post.text }}</p>
-                    {% if post.image %}
-                    <img src="{{ post.image_url }}" alt="Imagen del post" class="post-image">
-                    {% endif %}
-                    <p class="time">Publicado el {{ post.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
-                </article>
+                    {% include "includes/post.html" %}
                 {% endfor %}
             {% else %}
                 <p>No tienes publicaciones aún.</p>

@@ -1,0 +1,26 @@
+<article class="post">
+    <div class="post-header">
+        <img src="{{ post.user.avatar_url }}" alt="Avatar" class="post-avatar">
+        <div>
+            <p class="post-username">{{ post.user.displayname or post.user.username }}</p>
+            <p class="post-time">{{ post.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+        </div>
+    </div>
+    <div class="post-content">
+        <!-- Contenido del post -->
+        <p>{{ post.text }}</p>
+        {% if post.image %}
+            <img src="{{ post.image_url }}" alt="Imagen del post" class="post-image">
+        {% endif %}
+    </div>
+    <div class="post-actions">
+        <form action="/post/{{ post.id }}/like" method="post">
+            {% if current_user in post.likes %}
+                <button type="submit" class="post-like-btn liked">❤️ {{ post.likes|length }}</button>
+            {% else %}
+                <button type="submit" class="post-like-btn">♡ {{ post.likes|length }}</button>
+            {% endif %}
+        </form>
+        <a href="{{ url_for('publicaciones', post_id=post.id) }}">Ver Publicacion</a>
+    </div>                    
+</article>
