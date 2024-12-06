@@ -154,3 +154,22 @@ body {
     background-color: #003f7f;
 }
 
+.comment {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.replies {
+    margin-left: 20px;
+    padding-left: 10px;
+    border-left: 2px solid #ddd;
+}
+
+.reply {
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}

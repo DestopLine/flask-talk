@@ -31,11 +31,11 @@
                     {% endif %}
                 </div>
             </section>
-            <!-- Comentarios -->
             <section class="comments">
                 <h2>Comentarios</h2>
                 {% for comment in comments %}
                 <div class="comment">
+                    <!-- Comentario principal -->
                     <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
                     <form action="/comment/{{ comment.id }}/like" method="post">
                         {% if current_user in comment.likes %}
@@ -44,16 +44,25 @@
                         <button type="submit" class="like-btn">♡ {{ comment.likes|length }}</button>
                         {% endif %}
                     </form>
+            
+                    <!-- Mostrar respuestas -->
+                    <div class="replies">
+                        {% for reply in comment.replies %}
+                        <div class="reply">
+                            <p><strong>{{ reply.user.username }}:</strong> {{ reply.text }}</p>
+                            <small>{{ reply.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+            
+                    <!-- Formulario para responder al comentario -->
+                    <form action="{{ url_for('responder_comentario', comment_id=comment.id) }}" method="post">
+                        <textarea name="response" placeholder="Responder al comentario..." required></textarea>
+                        <button type="submit">Responder</button>
+                    </form>
                 </div>
                 {% endfor %}
-            </section>
-            <!-- Formulario para añadir comentario -->
-            <section class="add-comment">
-                <form action="{{ url_for('publicaciones', post_id=post.id) }}" method="post">
-                    <textarea name="comment" placeholder="Añadir un comentario..." required></textarea>
-                    <button type="submit">Comentar</button>
-                </form>
-            </section>
+            </section>            
         </main>
     </div>
 </body>

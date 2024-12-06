@@ -5,7 +5,7 @@ from flask_login import current_user, login_required, login_user
 from sqlalchemy import select
 from app.auth import setup_auth
 from app.database import Session
-from app.entities import Post, User, Comment, setup_db
+from app.entities import Post, User, Comment, Reply, setup_db
 
 flask_app = Flask(__name__)
 
@@ -124,7 +124,6 @@ def perfil(user_id):
         # Pasar un nuevo objeto user completamente gestionado por la sesión activa
         return render_template("perfil.html", user=user, posts=user_posts)
 
-
 @flask_app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def publicaciones(post_id):
@@ -132,12 +131,18 @@ def publicaciones(post_id):
         post = session.get(Post, post_id)
         if not post:
             return "<h1>Publicación no encontrada</h1>", 404
+
         if request.method == 'POST':
             comment_text = request.form['comment']
             new_comment = Comment(text=comment_text, user_id=current_user.id, post_id=post.id)
             session.add(new_comment)
             return redirect(url_for('publicaciones', post_id=post.id))
+
+        # Cargar comentarios junto con sus respuestas y usuarios asociados
         comments = session.query(Comment).filter_by(post_id=post.id).all()
+        for comment in comments:
+            session.refresh(comment, ["replies", "user"])  # Asegúrate de cargar las respuestas y usuarios
+
         return render_template('publicaciones.html', post=post, comments=comments)
 
 
@@ -182,7 +187,7 @@ def editar_post(post_id):
 
 @flask_app.route('/post/<int:post_id>/like', methods=['POST'])
 @login_required
-def like_post(post_id):
+def likes_post(post_id):
     with Session.begin() as session:
         post = session.get(Post, post_id)
         if not post:
@@ -195,9 +200,9 @@ def like_post(post_id):
         session.commit()
     return redirect(url_for('home'))
 
-@flask_app.route("/post/<int:post_id>/like", methods=['POST'])
+@flask_app.route('/comment/<int:comment_id>/like', methods=['POST'])
 @login_required
-def comments_likes(comment_id):
+def Comentarios_likes(comment_id):
     with Session.begin() as session:
         comment = session.get(Comment, comment_id)
         if not comment:
@@ -208,6 +213,29 @@ def comments_likes(comment_id):
             comment.likes.append(current_user)
         session.commit()
     return redirect(url_for("publicaciones"))
+
+
+@flask_app.route('/comment/<int:comment_id>/reply', methods=['POST'])
+@login_required
+def responder_comentario(comment_id):
+    with Session.begin() as session:
+        comentario = session.get(Comment, comment_id)
+        if not comentario:
+            return "<h1>El comentario no existe</h1>", 404
+
+        texto_respuesta = request.form.get('response')
+        if not texto_respuesta or texto_respuesta.strip() == "":
+            return "<h1>El texto de la respuesta no puede estar vacío</h1>", 400
+
+        nueva_respuesta = Reply(
+            comment_id=comment_id,
+            user_id=current_user.id,
+            text=texto_respuesta.strip()
+        )
+        session.add(nueva_respuesta)
+        session.commit()
+    return redirect(url_for('publicaciones', post_id=comentario.post_id))
+
 
 
 @flask_app.route("/logout", methods=["POST"])
