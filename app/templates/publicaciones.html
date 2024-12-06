@@ -31,6 +31,15 @@
                     {% endif %}
                 </div>
             </section>
+
+            <!-- Formulario para añadir comentario -->
+            <section class="add-comment">
+                <form action="{{ url_for('publicaciones', post_id=post.id) }}" method="post">
+                    <textarea name="comment" placeholder="Añadir un comentario..." required></textarea>
+                    <button type="submit">Comentar</button>
+                </form>
+            </section>
+
             <section class="comments">
                 <h2>Comentarios</h2>
                 {% for comment in comments %}
