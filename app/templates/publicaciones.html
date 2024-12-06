@@ -8,6 +8,12 @@
 </head>
 <body>
     <div class="container">
+        <!-- Botón para volver a la página de inicio -->
+        <div class="return-home">
+            <button href='{{ url_for("home") }}'" class="return-home-btn">
+                Volver a Inicio
+            </button>
+        </div>
         <main class="detalles">
             <!-- Detalles de la publicación -->
             <section class="post">
@@ -25,7 +31,6 @@
                     {% endif %}
                 </div>
             </section>
-
             <!-- Comentarios -->
             <section class="comments">
                 <h2>Comentarios</h2>
@@ -42,7 +47,6 @@
                 </div>
                 {% endfor %}
             </section>
-
             <!-- Formulario para añadir comentario -->
             <section class="add-comment">
                 <form action="{{ url_for('publicaciones', post_id=post.id) }}" method="post">
@@ -54,4 +58,3 @@
     </div>
 </body>
 </html>
-
