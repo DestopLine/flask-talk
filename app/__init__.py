@@ -211,8 +211,7 @@ def Comentarios_likes(comment_id):
             comment.likes.remove(current_user)
         else:
             comment.likes.append(current_user)
-        session.commit()
-    return redirect(url_for("publicaciones"))
+        return redirect(url_for("publicaciones", post_id=comment.post_id))
 
 
 @flask_app.route('/comment/<int:comment_id>/reply', methods=['POST'])
@@ -233,9 +232,7 @@ def responder_comentario(comment_id):
             text=texto_respuesta.strip()
         )
         session.add(nueva_respuesta)
-        session.commit()
-    return redirect(url_for('publicaciones', post_id=comentario.post_id))
-
+        return redirect(url_for('publicaciones', post_id=comentario.post_id))
 
 
 @flask_app.route("/logout", methods=["POST"])
