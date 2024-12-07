@@ -28,6 +28,7 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        print("\n\nasdf\n\n")
         if username and password:
             with Session.begin() as session:
                 user = (
@@ -38,7 +39,9 @@ def login():
                 )
 
                 if user is None:
-                    return "<h1>Usuario o contraseña incorrectos</h1>"
+                    return {
+                        "error": "Credenciales incorrectos",
+                    }, 401
 
                 login_user(user)
             next = request.args.get("next")
@@ -56,7 +59,29 @@ def registro():
         confirm_password = request.form["confirm_password"]
 
         if password != confirm_password:
-            return "<h1>Las contraseñas no coinciden</h1>"
+            return {
+                "error": "Las contraseñas no coinciden",
+            }, 400
+
+        if len(username) not in range(3, 27):
+            return {
+                "error": "El nombre de usuario debe contener como mínimo 3 caracteres y como máximo 26"
+            }, 400
+
+        if len(password) not in range(8, 33):
+            return {
+                "error": "La contraseña debe contener como mínimo 8 caracteres y como máximo 32",
+            }, 400
+
+        for c in username:
+            # Si el nombre de usuario no es un numero, letra, punto o barra baja
+            if not (ord(c) in range(48, 58)
+                    or ord(c) in range(65, 90)
+                    or ord(c) in range(97, 123)
+                    or c in [".", "_"]):
+                return {
+                    "error": "El nombre de usuario no puede contener caracteres especiales"
+                }, 400
 
         with Session.begin() as session:
             existing_user = (
@@ -67,7 +92,9 @@ def registro():
             )
 
             if existing_user is not None:
-                return "<h1>El nombre de usuario especificado ya está en uso</h1>"
+                return {
+                    "error": "El nombre de usuario especificado ya está en uso"
+                }, 400
 
             new_user = User(username=username, password=password)
 
@@ -195,7 +222,7 @@ def seguir(user_id):
             current_user_db.following.append(user_to_follow)
             session.commit()
 
-    return redirect(url_for("perfil", username=user_to_follow.username))
+        return redirect(url_for("perfil", username=user_to_follow.username))
 
 
 @flask_app.route("/dejar_de_seguir/<int:user_id>", methods=["POST"])

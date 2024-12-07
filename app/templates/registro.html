@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/registro.css') }}">
+    <script src="{{ url_for('static', filename='scripts/registro.js') }}" defer></script>
 </head>
 <body>
     <div class="form-container">
         <h1>Registro</h1>
-        <form action="/registro" method="post">
+        <form id="register-form">
             <div class="input-group">
                 <input type="text" name="username" id="username" required placeholder=" ">
                 <label for="username">Nombre de Usuario</label>
@@ -22,10 +23,10 @@
                 <input type="password" name="confirm_password" id="confirm_password" required placeholder=" ">
                 <label for="confirm_password">Confirmar Contraseña</label>
             </div>
-            <input type="submit" value="Registrarse">
+            <p class="error hidden">Test test</p>
+            <button class="registrarse" type="button">Registrarse</button>
         </form>
         <p>¿Ya tienes una cuenta? <a href="/login">Inicia Sesión aquí</a></p>
     </div>
 </body>
 </html>
-

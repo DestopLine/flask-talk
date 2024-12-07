@@ -75,7 +75,7 @@ body {
 }
 
 /* Botón de envío */
-.form-container input[type="submit"] {
+.form-container .iniciar-sesion {
     width: 100%;
     padding: 12px;
     font-size: 1rem;
@@ -87,7 +87,7 @@ body {
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.form-container input[type="submit"]:hover {
+.form-container .iniciar-sesion:hover {
     background: #0a85d1;
     transform: scale(1.02);
 }
@@ -125,4 +125,12 @@ body::before {
 .form-container {
     display: inline-block;
     vertical-align: middle;
+}
+
+.error {
+    color: red;
+}
+
+.hidden {
+    display: none;
 }
