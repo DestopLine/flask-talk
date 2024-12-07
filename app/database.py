@@ -1,8 +1,8 @@
 import sqlalchemy as sa  # Importa SQLAlchemy bajo el alias 'sa'
 from sqlalchemy.orm import declarative_base, sessionmaker  # Importa las funciones necesarias para crear modelos y manejar sesiones
 
-# Crea una conexión a la base de datos SQLite llamada "flask-chat.db"
-db = sa.create_engine("sqlite:///flask-chat.db", echo=True)
+# Crea una conexión a la base de datos SQLite llamada "flask-talk.db"
+db = sa.create_engine("sqlite:///flask-talk.db", echo=True)
 
 # Crea un 'Session' para interactuar con la base de datos
 Session = sessionmaker(bind=db)
