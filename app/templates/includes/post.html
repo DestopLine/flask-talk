@@ -2,7 +2,11 @@
     <div class="post-header">
         <img src="{{ post.user.avatar_url }}" alt="Avatar" class="post-avatar">
         <div>
-            <p class="post-username">{{ post.user.displayname or post.user.username }}</p>
+            <p class="post-username">
+                <a href="{{ url_for('perfil', user_id=post.user.id) }}">
+                    {{ post.user.displayname or post.user.username }}
+                </a>
+            </p>
             <p class="post-time">
                 {{ post.created_at.strftime('%d/%m/%Y %H:%M') }}
                 {% if post.edited_at %}

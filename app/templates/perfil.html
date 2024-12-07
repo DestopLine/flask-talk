@@ -16,10 +16,29 @@
             <h1>{{ user.username }}</h1>
             <p>Miembro desde: {{ user.created_at.strftime('%d/%m/%Y') }}</p>
         </section>
+
         <!-- Botón para volver a la página de inicio -->
         <div class="return-home">
-            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <a href="{{ url_for('home') }}">Inicio</a>
         </div>
+
+        <!-- Botón para seguir o dejar de seguir -->
+        <section class="follow-buttons">
+            {% if current_user.is_authenticated and current_user.id != user.id %}
+                {% if current_user in user.followers %}
+                    <!-- Botón para dejar de seguir -->
+                    <form class="dejar-de-seguir" action="{{ url_for('dejar_de_seguir', user_id=user.id) }}" method="POST">
+                        <button type="submit">Dejar de seguir</button>
+                    </form>
+                {% else %}
+                    <!-- Botón para seguir -->
+                    <form class="seguir" action="{{ url_for('seguir', user_id=user.id) }}" method="POST">
+                        <button type="submit">Seguir</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </section>
+
         <!-- Publicaciones del usuario -->
         <section class="user-posts">
             <h2>Mis publicaciones</h2>
@@ -30,8 +49,15 @@
             {% else %}
                 <p>No tienes publicaciones aún.</p>
             {% endif %}
-            <a href="{{ url_for('preferencias', user_id=current_user.id) }}">Preferencias</a>
         </section>
-    </div>    
+
+        <!-- Enlace a preferencias -->
+        {% if current_user.is_authenticated and current_user.id == user.id %}
+            <div class="preferences-link">
+                <a href="{{ url_for('preferencias', user_id=current_user.id) }}">Preferencias</a>
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>
+

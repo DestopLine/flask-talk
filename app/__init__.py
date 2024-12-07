@@ -1,11 +1,11 @@
 from io import BytesIO
 import flask_login
-from flask import Flask, redirect, render_template, request, send_file, url_for
+from flask import Flask, flash, abort, redirect, render_template, request, send_file, url_for
 from flask_login import current_user, login_required, login_user
 from sqlalchemy import select
 from app.auth import setup_auth
 from app.database import Session
-from app.entities import Post, User, Comment, Reply, setup_db
+from app.entities import Post, User, Comment, Reply, followers_table, setup_db
 
 flask_app = Flask(__name__)
 
@@ -123,6 +123,51 @@ def perfil(user_id):
 
         # Pasar un nuevo objeto user completamente gestionado por la sesión activa
         return render_template("perfil.html", user=user, posts=user_posts)
+
+
+@flask_app.route("/seguir/<int:user_id>", methods=["POST"])
+@login_required
+def seguir(user_id):
+    with Session.begin() as session:
+        # Obtener al usuario que se quiere seguir
+        user_to_follow = session.get(User, user_id)
+        if user_to_follow is None:  # Validar si el usuario existe
+            abort(404, description="Usuario no encontrado")
+
+        # Verificar que el usuario no se siga a sí mismo
+        if user_to_follow.id == current_user.id:
+            abort(400, description="No puedes seguirte a ti mismo")
+
+        # Añadir la relación de seguimiento
+        current_user_db = session.merge(current_user)  # Actualizar el usuario actual en la sesión
+        if user_to_follow not in current_user_db.following:
+            current_user_db.following.append(user_to_follow)
+            session.commit()
+
+    return redirect(url_for("perfil", user_id=user_id))
+
+
+@flask_app.route("/dejar_de_seguir/<int:user_id>", methods=["POST"])
+@login_required
+def dejar_de_seguir(user_id):
+    with Session.begin() as session:
+        # Obtener al usuario que se quiere dejar de seguir
+        user_to_unfollow = session.get(User, user_id)
+        if user_to_unfollow is None:  # Validar si el usuario existe
+            abort(404, description="Usuario no encontrado")
+
+        # Verificar que el usuario no se deje de seguir a sí mismo
+        if user_to_unfollow.id == current_user.id:
+            abort(400, description="No puedes dejar de seguirte a ti mismo")
+
+        # Remover la relación de seguimiento
+        current_user_db = session.merge(current_user)  # Actualizar el usuario actual en la sesión
+        if user_to_unfollow in current_user_db.following:
+            current_user_db.following.remove(user_to_unfollow)
+            session.commit()
+
+    return redirect(url_for("perfil", user_id=user_id))
+
 
 @flask_app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 @login_required

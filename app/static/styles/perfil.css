@@ -135,3 +135,24 @@ a:hover {
 .return-home-btn:active {
     background-color: #003f7f;
 }
+
+form button {
+    background-color: #007bff; /* Azul para seguir */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+form.dejar-de-seguir button {
+    background-color: #dc3545; /* Rojo para dejar de seguir */
+}
+
+form.dejar-de-seguir button:hover {
+    background-color: #a71d2a;
+}
