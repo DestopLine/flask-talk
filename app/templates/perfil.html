@@ -22,7 +22,7 @@
             <img src="{{ user.avatar_url }}" alt="Avatar" class="user-avatar">
             <h1>{{ user.displayname or user.username }}</h1>
             <p>@{{ user.username }}</p>
-            <p class="bio">{{ user.bio }}</p>
+            <p class="bio">{{ user.bio or ""}}</p>
             <p>Miembro desde: {{ user.created_at.strftime('%d/%m/%Y') }}</p>
             <!-- Cantidad de seguidores y seguidores -->
             <p>Seguidores: {{ user.followers | length }}</p>
