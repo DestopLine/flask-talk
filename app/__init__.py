@@ -47,7 +47,9 @@ def login():
             next = request.args.get("next")
             return redirect(next or url_for("index"))
         else:
-            return "<h1>Intento de inicio de sesion fallido, intentar de nuevo</h1>"
+            return {
+                "error": "Credenciales incompletos",
+            }
     return render_template("login.html")
 
 
@@ -439,7 +441,7 @@ def preferencias():
         if avatar_file is not None:
             user.avatar = avatar_file.stream.read()
 
-    return "<h1>Cambios guardados exitosamente</h1>"
+        return redirect(url_for("perfil", username=user.username))
 
 
 if __name__ == "__main__":
