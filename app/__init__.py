@@ -148,17 +148,18 @@ def post_image(post_id: int):
 
         return send_file(BytesIO(post.image), mimetype="image/gif")
 
-@flask_app.route("/perfil/<int:user_id>", methods=["GET"])
+@flask_app.route("/perfil/<username>", methods=["GET"])
 @login_required
-def perfil(user_id):
+def perfil(username):
     with Session.begin() as session:
-        user = session.get(User, user_id)
+        user = session.query(User).where(User.username == username).one()
+
         if not user:
             return "<h1>Usuario no encontrado</h1>", 404
 
         # Cargar las publicaciones del usuario
         user_posts = session.scalars(
-            select(Post).where(Post.user_id == user_id).order_by(Post.created_at.desc())
+            select(Post).where(Post.user_id == user.id).order_by(Post.created_at.desc())
         ).all()
 
         # Contar la cantidad de seguidores y a cuántas personas sigue
@@ -166,7 +167,13 @@ def perfil(user_id):
         following_count = len(user.following)  # La cantidad de personas a las que sigue
 
         # Pasar un nuevo objeto user completamente gestionado por la sesión activa
-        return render_template("perfil.html", user=user, posts=user_posts, followers_count=followers_count, following_count=following_count)
+        return render_template(
+            "perfil.html",
+            user=user,
+            posts=user_posts,
+            followers_count=followers_count,
+            following_count=following_count
+        )
 
 
 @flask_app.route("/seguir/<int:user_id>", methods=["POST"])
@@ -188,7 +195,7 @@ def seguir(user_id):
             current_user_db.following.append(user_to_follow)
             session.commit()
 
-    return redirect(url_for("perfil", user_id=user_id))
+    return redirect(url_for("perfil", username=user_to_follow.username))
 
 
 @flask_app.route("/dejar_de_seguir/<int:user_id>", methods=["POST"])
@@ -210,7 +217,7 @@ def dejar_de_seguir(user_id):
             current_user_db.following.remove(user_to_unfollow)
             session.commit()
 
-    return redirect(url_for("perfil", user_id=user_id))
+    return redirect(url_for("perfil", username=user_to_unfollow.username))
 
 
 @flask_app.route('/post/<int:post_id>', methods=['GET', 'POST'])

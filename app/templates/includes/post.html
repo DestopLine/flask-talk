@@ -1,11 +1,11 @@
 <article class="post" data-post-id="{{ post.id }}">
     <div class="post-header">
-        <a href="{{ url_for('perfil', user_id=post.user.id) }}">
+        <a href="{{ url_for('perfil', username=post.user.username) }}">
             <img src="{{ post.user.avatar_url }}" alt="Avatar" class="post-avatar">
         </a>
         <div>
             <p class="post-username">
-                <a href="{{ url_for('perfil', user_id=post.user.id) }}">
+                <a href="{{ url_for('perfil', username=post.user.username) }}">
                     {{ post.user.displayname or post.user.username }}
                 </a>
             </p>
