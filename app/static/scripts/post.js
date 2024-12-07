@@ -3,11 +3,12 @@ let posts = document.querySelectorAll(".post");
 for (let post of posts) {
 	addDeleteFeature(post);
 	addEditFeature(post);
+	addLikeFeature(post);
 }
 
 /**
-	* @param {Element} post
-	*/
+* @param {Element} post
+*/
 function addDeleteFeature(post) {
 	let deleteButton = post.querySelector(".post-delete-btn");
 	if (deleteButton == null) {
@@ -25,8 +26,8 @@ function addDeleteFeature(post) {
 }
 
 /**
-	* @param {Element} post
-	*/
+* @param {Element} post
+*/
 function addEditFeature(post) {
 	let editButton = post.querySelector(".post-edit-btn");
 	if (editButton == null) {
@@ -91,5 +92,31 @@ function addEditFeature(post) {
 
 			restorePost();
 		})
+	})
+}
+
+/**
+* @param {Element} post
+*/
+function addLikeFeature(post) {
+	let likeButton = post.querySelector(".post-like-btn");
+	const postId = post.dataset.postId;
+
+	likeButton.addEventListener("click", async (_) => {
+		let response = await fetch(`/post/${postId}/like`, {
+			method: "post",
+		})
+
+		if (response.ok) {
+			const body = await response.json();
+
+			if (body["liked"]) {
+				likeButton.classList.add("liked");
+				likeButton.textContent = `❤️ ${body["likes"]}`;
+			} else {
+				likeButton.classList.remove("liked");
+				likeButton.textContent = `♡ ${body["likes"]}`;
+			}
+		}
 	})
 }

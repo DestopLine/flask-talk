@@ -256,15 +256,24 @@ def editar_post(post_id):
 def likes_post(post_id):
     with Session.begin() as session:
         post = session.get(Post, post_id)
-        if not post:
+        user = session.get(User, current_user.id)
+
+        if post is None:
             return "<h1>Publicación no encontrada</h1>", 404
-        # Verificar si el usuario ya ha dado like
-        if current_user in post.likes:
-            post.likes.remove(current_user)
+
+        if user in post.likes:
+            post.likes.remove(user)
+            return {
+                "liked": False,
+                "likes": len(post.likes),
+            }, 200
         else:
-            post.likes.append(current_user)
-        session.commit()
-    return redirect(url_for('home'))
+            post.likes.append(user)
+            return {
+                "liked": True,
+                "likes": len(post.likes),
+            }, 200
+
 
 @flask_app.route('/comment/<int:comment_id>/like', methods=['POST'])
 @login_required

@@ -55,9 +55,15 @@
     color: #3498db;
 }
 
-.post-like-btn:hover,
 .post-comment-btn:hover {
     color: #2980b9;
+}
+
+.post-like-btn:hover {
+    color: white;
+    background-color: transparent;
+    border-radius: 30%;
+    box-shadow: #2980b9ff 0 0 0.15em 0.3em;
 }
 
 .hidden {

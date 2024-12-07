@@ -23,13 +23,12 @@
         {% endif %}
     </div>
     <div class="post-actions">
-        <form action="/post/{{ post.id }}/like" method="post">
-            {% if current_user in post.likes %}
-                <button type="submit" class="post-like-btn liked">❤️ {{ post.likes|length }}</button>
-            {% else %}
-                <button type="submit" class="post-like-btn">♡ {{ post.likes|length }}</button>
-            {% endif %}
-        </form>
+        {% if current_user in post.likes %}
+            <button type="submit" class="post-like-btn liked">❤️ {{ post.likes | length }}</button>
+        {% else %}
+            <button type="submit" class="post-like-btn">♡ {{ post.likes | length }}</button>
+        {% endif %}
+
         {% if current_user.id == post.user.id %}
             <button type="button" class="post-edit-btn">Editar</button>
             <button type="button" class="post-delete-btn">Eliminar</button>
