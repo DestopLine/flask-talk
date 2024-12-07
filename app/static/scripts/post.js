@@ -4,6 +4,7 @@ for (let post of posts) {
 	addDeleteFeature(post);
 	addEditFeature(post);
 	addLikeFeature(post);
+	addPostRedirectFeature(post);
 }
 
 /**
@@ -117,6 +118,20 @@ function addLikeFeature(post) {
 				likeButton.classList.remove("liked");
 				likeButton.textContent = `♡ ${body["likes"]}`;
 			}
+		}
+	})
+}
+
+/**
+* @param {Element} post
+*/
+function addPostRedirectFeature(post) {
+	const postId = post.dataset.postId;
+
+	post.addEventListener("click", (event) => {
+		console.log(event.target.nodeName);
+		if (event.target.nodeName === "ARTICLE" || event.target.parentNode.nodeName === "ARTICLE") {
+			location.href = `/post/${postId}`;
 		}
 	})
 }

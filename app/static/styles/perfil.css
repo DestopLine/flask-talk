@@ -28,7 +28,7 @@ body {
     margin-bottom: 20px;
 }
 
-.user-info .avatar {
+.user-info .user-avatar {
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -36,9 +36,10 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
     transition: transform 0.3s;
+    object-fit: cover;
 }
 
-.user-info .avatar:hover {
+.user-info .user-avatar:hover {
     transform: scale(1.1);
 }
 

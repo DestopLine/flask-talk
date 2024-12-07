@@ -1,6 +1,8 @@
 <article class="post" data-post-id="{{ post.id }}">
     <div class="post-header">
-        <img src="{{ post.user.avatar_url }}" alt="Avatar" class="post-avatar">
+        <a href="{{ url_for('perfil', user_id=post.user.id) }}">
+            <img src="{{ post.user.avatar_url }}" alt="Avatar" class="post-avatar">
+        </a>
         <div>
             <p class="post-username">
                 <a href="{{ url_for('perfil', user_id=post.user.id) }}">
