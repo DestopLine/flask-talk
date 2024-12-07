@@ -334,6 +334,31 @@ def responder_comentario(comment_id):
         return redirect(url_for('publicaciones', post_id=comentario.post_id))
 
 
+@flask_app.route("/likes_respuestas/<int:reply_id>/like_reply", methods=["POST"])
+@login_required
+def likes_repuestas(reply_id):
+    with Session.begin() as session:
+        reply = session.get(Reply, reply_id)  # Usar session.get en lugar de Reply.query.get_or_404
+
+        if reply is None:
+            return "<h1>Respuesta no encontrada</h1>", 404  # Verificación si la respuesta no existe
+
+        # Verifica si el usuario ya le dio like a la respuesta
+        if current_user in reply.likes:
+            # Si ya le dio like, lo elimina
+            reply.likes.remove(current_user)
+            liked = False  # Indicador de que el like fue eliminado
+        else:
+            # Si no, agrega el like
+            reply.likes.append(current_user)
+            liked = True  # Indicador de que el like fue agregado
+
+        session.commit()
+
+    # Redirige al post donde la respuesta fue dada
+    return redirect(url_for("publicaciones", post_id=reply.comment.post_id))  # Redirección al post correcto
+
+
 @flask_app.route("/logout", methods=["POST"])
 @login_required
 def logout():

@@ -54,7 +54,7 @@
                         <button type="submit" class="like-btn">♡ {{ comment.likes | length }}</button>
                         {% endif %}
                     </form>
-            
+
                     <!-- Mostrar respuestas -->
                     {% if comment.replies | length > 0 %}
                         <button type="button" class="toggle-respuestas-btn">Mostrar {{ comment.replies | length }} respuestas</button>
@@ -63,6 +63,15 @@
                             <div class="reply">
                                 <p><strong>{{ reply.user.username }}:</strong> {{ reply.text }}</p>
                                 <small>{{ reply.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                                
+                                <!-- Botón de like en la respuesta -->
+                                <form action="/like_reply/{{ reply.id }}" method="post">
+                                    {% if current_user in reply.likes %}
+                                    <button type="submit" class="like-btn liked">❤️ {{ reply.likes | length }}</button>
+                                    {% else %}
+                                    <button type="submit" class="like-btn">♡ {{ reply.likes | length }}</button>
+                                    {% endif %}
+                                </form>
                             </div>
                             {% endfor %}
                         </div>
@@ -80,3 +89,4 @@
     </div>
 </body>
 </html>
+
