@@ -1,11 +1,13 @@
 from io import BytesIO
+
+from flask import Flask, abort, redirect, render_template, request, send_file, url_for
 import flask_login
-from flask import Flask, flash, abort, redirect, render_template, request, send_file, url_for
 from flask_login import current_user, login_required, login_user
 from sqlalchemy import select
+
 from app.auth import setup_auth
 from app.database import Session
-from app.entities import Post, User, Comment, Reply, setup_db
+from app.entities import Comment, Post, Reply, User, followers_table, setup_db
 
 flask_app = Flask(__name__)
 
@@ -301,12 +303,13 @@ def likes_post(post_id):
 def Comentarios_likes(comment_id):
     with Session.begin() as session:
         comment = session.get(Comment, comment_id)
+        user = session.get(User, current_user.id)
         if not comment:
             return "<h1>No hay comentarios</h1>"
         if current_user in comment.likes:
-            comment.likes.remove(current_user)
+            comment.likes.remove(user)
         else:
-            comment.likes.append(current_user)
+            comment.likes.append(user)
         return redirect(url_for("publicaciones", post_id=comment.post_id))
 
 
