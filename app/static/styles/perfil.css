@@ -56,6 +56,11 @@ body {
     font-size: 16px;
 }
 
+.user-info .bio {
+    color: black;
+    font-size: 18px;
+}
+
 /* Botones de seguimiento */
 .follow-buttons {
     text-align: center;

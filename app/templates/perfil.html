@@ -10,10 +10,19 @@
 </head>
 <body>
     <div class="perfil-container">
+        <!-- Enlace a preferencias -->
+        {% if current_user.is_authenticated and current_user.id == user.id %}
+            <div class="preferences-link">
+                <a href="{{ url_for('preferencias', user_id=current_user.id) }}">Preferencias</a>
+            </div>
+        {% endif %}
+
         <!-- Información del perfil -->
         <section class="user-info">
             <img src="{{ user.avatar_url }}" alt="Avatar" class="user-avatar">
-            <h1>{{ user.username }}</h1>
+            <h1>{{ user.displayname or user.username }}</h1>
+            <p>@{{ user.username }}</p>
+            <p class="bio">{{ user.bio }}</p>
             <p>Miembro desde: {{ user.created_at.strftime('%d/%m/%Y') }}</p>
             <!-- Cantidad de seguidores y seguidores -->
             <p>Seguidores: {{ user.followers | length }}</p>
@@ -54,12 +63,6 @@
             {% endif %}
         </section>
 
-        <!-- Enlace a preferencias -->
-        {% if current_user.is_authenticated and current_user.id == user.id %}
-            <div class="preferences-link">
-                <a href="{{ url_for('preferencias', user_id=current_user.id) }}">Preferencias</a>
-            </div>
-        {% endif %}
     </div>
 </body>
 </html>
