@@ -227,6 +227,25 @@ def eliminar_post(post_id):
         session.delete(post)
         return "Post eliminado", 200
 
+@flask_app.route('/para_ti/<int:user_id>')
+@login_required
+def para_ti(user_id):
+    with Session.begin() as session:
+        followed_users = current_user.following
+        posts = session.query(Post).filter(Post.user_id.in_([user.id for user in followed_users])) \
+            .order_by(Post.created_at.desc()).all()
+        return render_template("index.html", posts=posts)
+
+@flask_app.route('/siguiendo/<int:user_id>')
+@login_required
+def following(user_id):
+    with Session.begin() as session:
+        followed_users = current_user.following
+        posts = session.query(Post).filter(Post.user_id.in_([user.id for user in followed_users])) \
+            .order_by(Post.created_at.desc()).all()
+        return render_template("index.html", posts=posts)
+
+
 
 @flask_app.route("/post/<int:post_id>", methods=["PUT"])
 @login_required

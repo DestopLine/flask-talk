@@ -36,17 +36,21 @@
         <main class="feed">
             <header>
                 <h1>Inicio</h1>
+                <!-- Botones "Para ti" y "Following" -->
+                <div class="feed-buttons">
+                    <button>Para ti</button>
+                    <button>Following</button>
+                </div>
             </header>
 
             <!-- Crear publicación -->
             <section class="create-post">
-                <!-- <form id="create-post-form"> -->
                 <form
                     id="create-post-form"
                     action="{{ url_for('post') }}"
                     method="post"
                     enctype="multipart/form-data"
-                > 
+                >
                     <textarea name="content" placeholder="¿Qué estás pensando?"></textarea>
 
                     <div class="create-post-image-container hidden">
