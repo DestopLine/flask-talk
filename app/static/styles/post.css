@@ -31,6 +31,7 @@
 .post-content p {
     font-size: 1rem;
     color: #2c3e50;
+    white-space: pre-wrap;
 }
 
 .post-image {
@@ -60,5 +61,5 @@
 }
 
 .hidden {
-    visibility: hidden;
+    display: none;
 }

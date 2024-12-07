@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la publicación</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/publicaciones.css') }}">
+    <script src="{{ url_for('static', filename='scripts/publicaciones.js') }}" defer></script>
 </head>
 <body>
     <div class="container">
@@ -55,15 +56,18 @@
                     </form>
             
                     <!-- Mostrar respuestas -->
-                    <div class="replies">
-                        {% for reply in comment.replies %}
-                        <div class="reply">
-                            <p><strong>{{ reply.user.username }}:</strong> {{ reply.text }}</p>
-                            <small>{{ reply.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                    {% if comment.replies|length > 0 %}
+                        <button type="button" class="toggle-respuestas-btn">Mostrar respuestas</button>
+                        <div class="replies hidden">
+                            {% for reply in comment.replies %}
+                            <div class="reply">
+                                <p><strong>{{ reply.user.username }}:</strong> {{ reply.text }}</p>
+                                <small>{{ reply.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                    </div>
-            
+                    {% endif %}
+
                     <!-- Formulario para responder al comentario -->
                     <form action="{{ url_for('responder_comentario', comment_id=comment.id) }}" method="post">
                         <textarea name="response" placeholder="Responder al comentario..." required></textarea>
