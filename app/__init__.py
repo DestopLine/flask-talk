@@ -16,7 +16,7 @@ flask_app = Flask(__name__)
 def main() -> None:
     setup_db()  # Configuración inicial de la base de datos
     setup_auth(flask_app, Session)  # Configuración del sistema de autenticación
-    flask_app.run(debug=True)  # Ejecutar la aplicación en modo depuración
+    flask_app.run(debug=True, host="0.0.0.0")  # Ejecutar la aplicación en modo depuración
 
 # Ruta principal que redirige a la página de inicio
 @flask_app.route("/")

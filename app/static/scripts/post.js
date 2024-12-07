@@ -129,7 +129,6 @@ function addPostRedirectFeature(post) {
 	const postId = post.dataset.postId;
 
 	post.addEventListener("click", (event) => {
-		console.log(event.target.nodeName);
 		if (event.target.nodeName === "ARTICLE" || event.target.parentNode.nodeName === "ARTICLE") {
 			location.href = `/post/${postId}`;
 		}

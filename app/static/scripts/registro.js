@@ -18,5 +18,4 @@ submitButton.addEventListener("click", async (_) => {
 	const body = await response.json();
 	errorMessage.textContent = body["error"]
 	errorMessage.classList.remove("hidden")
-	console.log("asdfasdf");
 })
