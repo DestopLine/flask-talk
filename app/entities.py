@@ -94,7 +94,7 @@ class Post(Base):
 
     user: Mapped[User] = relationship(back_populates="posts")
     likes: Mapped[list[User]] = relationship(secondary=post_likes_table)
-    comments: Mapped[list["Comment"]] = relationship(back_populates="post")
+    comments: Mapped[list["Comment"]] = relationship(back_populates="post", cascade="all, delete")
 
     @property
     def image_url(self) -> str:
@@ -112,7 +112,7 @@ class Comment(Base):
 
     post: Mapped[Post] = relationship(back_populates="comments")
     user: Mapped[User] = relationship(back_populates="comments")
-    replies: Mapped[list["Reply"]] = relationship(back_populates="comment")
+    replies: Mapped[list["Reply"]] = relationship(back_populates="comment", cascade="all, delete")
     likes: Mapped[list[User]] = relationship(secondary=comment_likes_table)
 
 
