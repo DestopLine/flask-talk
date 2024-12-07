@@ -49,15 +49,15 @@
                     <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
                     <form action="/comment/{{ comment.id }}/like" method="post">
                         {% if current_user in comment.likes %}
-                        <button type="submit" class="like-btn liked">❤️ {{ comment.likes|length }}</button>
+                        <button type="submit" class="like-btn liked">❤️ {{ comment.likes | length }}</button>
                         {% else %}
-                        <button type="submit" class="like-btn">♡ {{ comment.likes|length }}</button>
+                        <button type="submit" class="like-btn">♡ {{ comment.likes | length }}</button>
                         {% endif %}
                     </form>
             
                     <!-- Mostrar respuestas -->
-                    {% if comment.replies|length > 0 %}
-                        <button type="button" class="toggle-respuestas-btn">Mostrar respuestas</button>
+                    {% if comment.replies | length > 0 %}
+                        <button type="button" class="toggle-respuestas-btn">Mostrar {{ comment.replies | length }} respuestas</button>
                         <div class="replies hidden">
                             {% for reply in comment.replies %}
                             <div class="reply">
