@@ -15,6 +15,9 @@
             <img src="{{ user.avatar_url }}" alt="Avatar" class="user-avatar">
             <h1>{{ user.username }}</h1>
             <p>Miembro desde: {{ user.created_at.strftime('%d/%m/%Y') }}</p>
+            <!-- Cantidad de seguidores y seguidores -->
+            <p>Seguidores: {{ user.followers | length }}</p>
+            <p>Siguiendo: {{ user.following | length }}</p>
         </section>
 
         <!-- Botón para volver a la página de inicio -->
@@ -60,4 +63,5 @@
     </div>
 </body>
 </html>
+
 

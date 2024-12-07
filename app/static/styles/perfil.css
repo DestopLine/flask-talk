@@ -1,3 +1,4 @@
+/* Estilos generales */
 body {
     font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
@@ -21,6 +22,7 @@ body {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
+/* Información del perfil */
 .user-info {
     text-align: center;
     margin-bottom: 20px;
@@ -53,6 +55,40 @@ body {
     font-size: 16px;
 }
 
+/* Botones de seguimiento */
+.follow-buttons {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.follow-buttons form {
+    display: inline-block;
+    margin: 10px;
+}
+
+.follow-buttons button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.follow-buttons button:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.follow-buttons .seguir button {
+    background-color: #28a745; /* Verde para seguir */
+}
+
+.follow-buttons .dejar-de-seguir button {
+    background-color: #dc3545; /* Rojo para dejar de seguir */
+}
+
+/* Publicaciones del usuario */
 .user-posts h2 {
     font-size: 22px;
     margin-bottom: 15px;
@@ -96,6 +132,7 @@ body {
     display: block;
 }
 
+/* Enlace */
 a {
     color: #007bff;
     text-decoration: none;
@@ -107,7 +144,6 @@ a:hover {
     color: #0056b3;
     text-decoration: underline;
 }
-
 
 /* Contenedor del botón de volver */
 .return-home {
@@ -134,25 +170,4 @@ a:hover {
 
 .return-home-btn:active {
     background-color: #003f7f;
-}
-
-form button {
-    background-color: #007bff; /* Azul para seguir */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-}
-
-form button:hover {
-    background-color: #0056b3;
-}
-
-form.dejar-de-seguir button {
-    background-color: #dc3545; /* Rojo para dejar de seguir */
-}
-
-form.dejar-de-seguir button:hover {
-    background-color: #a71d2a;
 }

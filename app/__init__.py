@@ -5,7 +5,7 @@ from flask_login import current_user, login_required, login_user
 from sqlalchemy import select
 from app.auth import setup_auth
 from app.database import Session
-from app.entities import Post, User, Comment, Reply, followers_table, setup_db
+from app.entities import Post, User, Comment, Reply, setup_db
 
 flask_app = Flask(__name__)
 
@@ -128,7 +128,6 @@ def post_image(post_id: int):
 
         return send_file(BytesIO(post.image), mimetype="image/gif")
 
-
 @flask_app.route("/perfil/<int:user_id>", methods=["GET"])
 @login_required
 def perfil(user_id):
@@ -142,8 +141,12 @@ def perfil(user_id):
             select(Post).where(Post.user_id == user_id).order_by(Post.created_at.desc())
         ).all()
 
+        # Contar la cantidad de seguidores y a cuántas personas sigue
+        followers_count = len(user.followers)  # La cantidad de seguidores
+        following_count = len(user.following)  # La cantidad de personas a las que sigue
+
         # Pasar un nuevo objeto user completamente gestionado por la sesión activa
-        return render_template("perfil.html", user=user, posts=user_posts)
+        return render_template("perfil.html", user=user, posts=user_posts, followers_count=followers_count, following_count=following_count)
 
 
 @flask_app.route("/seguir/<int:user_id>", methods=["POST"])
