@@ -93,20 +93,41 @@ def home():
 @flask_app.route("/post", methods=["POST"])
 @login_required
 def post():
-    content = request.form["content"]  # Asegúrate de capturar el contenido del post
     with Session.begin() as session:
-        # Recargar al usuario desde la base de datos
         user = session.get(User, current_user.id)
 
         if user is None:
             return "<h1>Usuario no encontrado</h1>", 404
 
-        # Crear y guardar el nuevo post
-        new_post = Post(user_id=user.id, text=content)
-        session.add(new_post)  # Usar session en lugar de db.session
-        session.commit()  # Usar session.commit()
+        try:
+            image = request.files["image"] or None
+            new_post = Post(
+                user_id=user.id,
+                text=request.form["content"],
+            )
+            if image is not None:
+                new_post.image = image.stream.read()
+        except KeyError:
+            return "Json mal formado", 400
+
+        session.add(new_post)
 
     return redirect(url_for("home"))
+
+
+@flask_app.route("/post/<int:post_id>/image")
+def post_image(post_id: int):
+    with Session.begin() as session:
+        post = session.get(Post, post_id)
+
+        if post is None:
+            return "Post not found", 404
+
+        if post.image is None:
+            return "Image not found", 404
+
+        return send_file(BytesIO(post.image), mimetype="image/gif")
+
 
 @flask_app.route("/perfil/<int:user_id>", methods=["GET"])
 @login_required

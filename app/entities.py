@@ -96,6 +96,10 @@ class Post(Base):
     likes: Mapped[list[User]] = relationship(secondary=post_likes_table)
     comments: Mapped[list["Comment"]] = relationship(back_populates="post")
 
+    @property
+    def image_url(self) -> str:
+        return url_for("post_image", post_id=self.id)
+
 
 class Comment(Base):
     __tablename__ = "comments"

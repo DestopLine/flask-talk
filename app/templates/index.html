@@ -6,6 +6,7 @@
     <title>Inicio</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/post.css') }}">
+    <script src="{{ url_for('static', filename='scripts/index.js') }}" defer></script>
     <script src="{{ url_for('static', filename='scripts/post.js') }}" defer></script>
 </head>
 <body>
@@ -39,9 +40,34 @@
 
             <!-- Crear publicación -->
             <section class="create-post">
-                <form action="{{ url_for('post') }}" method="post">
-                    <textarea name="content" placeholder="¿Qué estás pensando?" required></textarea>
-                    <button type="submit">Publicar</button>
+                <!-- <form id="create-post-form"> -->
+                <form
+                    id="create-post-form"
+                    action="{{ url_for('post') }}"
+                    method="post"
+                    enctype="multipart/form-data"
+                > 
+                    <textarea name="content" placeholder="¿Qué estás pensando?"></textarea>
+
+                    <div class="create-post-image-container hidden">
+                        <img id="create-post-image" alt="Imagen que será subida junto al post">
+                        <button type="button">Eliminar</button>
+                    </div>
+
+                    <div class="create-post-buttons">
+                        <button type="button">
+                            <label for="create-post-image-input">Imagen</label>
+                        </button>
+                        <br>
+                        <input
+                            type="file"
+                            name="image"
+                            id="create-post-image-input"
+                            accept="image/png, image/jpeg"
+                            class="hidden"
+                        >
+                        <button type="submit" id="create-post-submit" disabled>Publicar</button>
+                    </div>
                 </form>
             </section>
 

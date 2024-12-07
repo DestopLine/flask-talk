@@ -190,6 +190,43 @@ header h1 {
     color: #2980b9;
 }
 
+.create-post-buttons {
+    display: flex;
+    column-gap: 0.5em;
+}
+
+.create-post-buttons button label {
+    cursor: inherit;
+}
+
+.create-post-image-container {
+    position: relative;
+    width: fit-content;
+}
+
+.create-post-image-container img {
+    height: 5em;
+    width: 5em;
+    border-radius: 1em;
+    object-fit: cover;
+}
+
+.create-post-image-container button {
+    height: 2em;
+    border-radius: 1em;
+    position: absolute;
+    top: -0.5em;
+    right: -2.5em;
+    background-color: grey;
+    text-align: center;
+    text-decoration: none;
+    padding: 0.3em 0.6em
+}
+
+.hidden {
+    display: none;
+}
+
 /* Mejoras para una interfaz agradable */
 body {
     font-size: 16px;
@@ -201,12 +238,22 @@ textarea:focus, input:focus {
 }
 
 button {
-    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+button:enabled:hover {
     background-color: #2980b9;
+}
+
+button:disabled {
+    cursor: default;
+    background-color: #4e567a;
+    color: grey;
+}
+
+button:disabled:hover {
+    background-color: #4e567a;
+    color: grey;
 }
 
 @media screen and (max-width: 768px) {
