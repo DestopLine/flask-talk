@@ -83,11 +83,29 @@ def registro():
 @login_required
 def home():
     with Session.begin() as session:
-        # Asegúrate de que current_user esté cargado completamente
         user = session.merge(current_user)
-        # Obtén las publicaciones
-        posts = session.query(Post).order_by(Post.created_at.desc()).all()
-        return render_template("index.html", current_user=user, posts=posts)
+        query = session.query(Post).order_by(Post.created_at.desc())
+
+        following_only = request.args.get(
+            "following",
+            default=False,
+            type=lambda x: x.lower() == "true"
+        )
+
+        if following_only:
+            query = (
+                query
+                .join(User, User.id == Post.user_id)
+                .join(followers_table, followers_table.c.following_id == User.id)
+                .where(followers_table.c.follower_id == user.id)
+            )
+
+        return render_template(
+            "index.html",
+            current_user=user,
+            posts=query.all(),
+            siguiendo=following_only,
+        )
 
 
 @flask_app.route("/post", methods=["POST"])
@@ -229,25 +247,6 @@ def eliminar_post(post_id):
 
         session.delete(post)
         return "Post eliminado", 200
-
-@flask_app.route('/para_ti/<int:user_id>')
-@login_required
-def para_ti(user_id):
-    with Session.begin() as session:
-        followed_users = current_user.following
-        posts = session.query(Post).filter(Post.user_id.in_([user.id for user in followed_users])) \
-            .order_by(Post.created_at.desc()).all()
-        return render_template("index.html", posts=posts)
-
-@flask_app.route('/siguiendo/<int:user_id>')
-@login_required
-def following(user_id):
-    with Session.begin() as session:
-        followed_users = current_user.following
-        posts = session.query(Post).filter(Post.user_id.in_([user.id for user in followed_users])) \
-            .order_by(Post.created_at.desc()).all()
-        return render_template("index.html", posts=posts)
-
 
 
 @flask_app.route("/post/<int:post_id>", methods=["PUT"])

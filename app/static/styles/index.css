@@ -300,14 +300,14 @@ button:disabled:hover {
     transition: background-color 0.3s, border-color 0.3s;
 }
 
-/* Estilo para el botón "Para ti" */
-.feed-buttons button:first-child {
-    color: #1DA1F2; /* Azul característico de Twitter */
+/* Estilo para el botón seleccionado */
+.feed-buttons button.feed-selected {
+    color: #1DA1F2;
     border: 1px solid #1DA1F2;
 }
 
-/* Estilo para el botón "Following" */
-.feed-buttons button:last-child {
+/* Estilo para el botón no seleccionado */
+.feed-buttons button:not(.feed-selected) {
     color: #657786; /* Gris para el botón "Following" */
     border: 1px solid #657786;
 }
@@ -320,18 +320,4 @@ button:disabled:hover {
 /* Efecto cuando el botón está activo (presionado) */
 .feed-buttons button:active {
     background-color: rgba(29, 161, 242, 0.2);
-}
-
-/* Estilo cuando el botón "Para ti" está seleccionado */
-.feed-buttons button:first-child.active {
-    background-color: #1DA1F2;
-    color: white;
-    border: 1px solid #1DA1F2;
-}
-
-/* Estilo cuando el botón "Following" está seleccionado */
-.feed-buttons button:last-child.active {
-    background-color: #E1E8ED;
-    color: #1DA1F2;
-    border: 1px solid #1DA1F2;
 }

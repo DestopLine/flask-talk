@@ -36,10 +36,15 @@
         <main class="feed">
             <header>
                 <h1>Inicio</h1>
-                <!-- Botones "Para ti" y "Following" -->
+                <!-- Botones "Para ti" y "Siguiendo" -->
                 <div class="feed-buttons">
-                    <button>Para ti</button>
-                    <button>Following</button>
+                    {% if siguiendo %}
+                        <a href="/home"><button>Para ti</button></a>
+                        <button class="feed-selected">Siguiendo</button>
+                    {% else %}
+                        <button class="feed-selected">Para ti</button>
+                        <a href="/home?following=true"><button>Siguiendo</button></a>
+                    {% endif %}
                 </div>
             </header>
 
