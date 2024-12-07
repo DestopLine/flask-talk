@@ -12,25 +12,27 @@
 <body>
     <div class="container">
         <!-- Barra lateral izquierda -->
-        <aside class="sidebar">
-            <div class="profile">
-                <!-- Avatar de usuario -->
-                <img src="{{ current_user.avatar_url }}" alt="Avatar" class="avatar">
-                <p>{{ current_user.username }}</p>
-                <!-- Enlace al perfil -->
-                <a href="{{ url_for('perfil', username=current_user.username) }}">Mi perfil</a>
-            </div>
-            <!-- Menú de navegación -->
-            <ul class="menu">
-                <li><a href="{{ url_for('home') }}">Inicio</a></li>
-                <li>
-                    <!-- Botón de cierre de sesión -->
-                    <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
-                        <button type="submit" class="logout-btn">Cerrar sesión</button>
-                    </form>
-                </li>
-            </ul>
-        </aside>
+        <div class="sidebar-wrapper">
+            <aside class="sidebar">
+                <div class="profile">
+                    <!-- Avatar de usuario -->
+                    <img src="{{ current_user.avatar_url }}" alt="Avatar" class="avatar">
+                    <p>{{ current_user.username }}</p>
+                    <!-- Enlace al perfil -->
+                    <a href="{{ url_for('perfil', username=current_user.username) }}">Mi perfil</a>
+                </div>
+                <!-- Menú de navegación -->
+                <ul class="menu">
+                    <li><a href="{{ url_for('home') }}">Inicio</a></li>
+                    <li>
+                        <!-- Botón de cierre de sesión -->
+                        <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
+                            <button type="submit" class="logout-btn">Cerrar sesión</button>
+                        </form>
+                    </li>
+                </ul>
+            </aside>
+        </div>
 
         <!-- Feed principal -->
         <main class="feed">
