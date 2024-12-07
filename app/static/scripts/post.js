@@ -3,7 +3,7 @@ let posts = document.querySelectorAll(".post");
 for (let post of posts) {
 	addDeleteFeature(post);
 	addEditFeature(post);
-	addLikeFeature(post);
+	addReplyLikeFeature(post);
 	addPostRedirectFeature(post);
 }
 
@@ -99,7 +99,7 @@ function addEditFeature(post) {
 /**
 * @param {Element} post
 */
-function addLikeFeature(post) {
+function addReplyLikeFeature(post) {
 	let likeButton = post.querySelector(".post-like-btn");
 	const postId = post.dataset.postId;
 

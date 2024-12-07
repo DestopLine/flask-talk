@@ -44,45 +44,41 @@
             <section class="comments">
                 <h2>Comentarios</h2>
                 {% for comment in comments %}
-                <div class="comment">
-                    <!-- Comentario principal -->
-                    <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
-                    <form action="/comment/{{ comment.id }}/like" method="post">
+                    <div class="comment" data-comment-id="{{ comment.id }}">
+                        <!-- Comentario principal -->
+                        <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
                         {% if current_user in comment.likes %}
-                        <button type="submit" class="like-btn liked">❤️ {{ comment.likes | length }}</button>
+                            <button type="button" class="like-btn comment-like-btn liked">❤️ {{ comment.likes | length }}</button>
                         {% else %}
-                        <button type="submit" class="like-btn">♡ {{ comment.likes | length }}</button>
+                            <button type="button" class="like-btn comment-like-btn">♡ {{ comment.likes | length }}</button>
                         {% endif %}
-                    </form>
 
-                    <!-- Mostrar respuestas -->
-                    {% if comment.replies | length > 0 %}
-                        <button type="button" class="toggle-respuestas-btn">Mostrar {{ comment.replies | length }} respuestas</button>
-                        <div class="replies hidden">
-                            {% for reply in comment.replies %}
-                            <div class="reply">
-                                <p><strong>{{ reply.user.username }}:</strong> {{ reply.text }}</p>
-                                <small>{{ reply.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
-                                
-                                <!-- Botón de like en la respuesta -->
-                                <form action="/like_reply/{{ reply.id }}" method="post">
-                                    {% if current_user in reply.likes %}
-                                    <button type="submit" class="like-btn liked">❤️ {{ reply.likes | length }}</button>
-                                    {% else %}
-                                    <button type="submit" class="like-btn">♡ {{ reply.likes | length }}</button>
-                                    {% endif %}
-                                </form>
+                        <!-- Mostrar respuestas -->
+                        {% if comment.replies | length > 0 %}
+                            <button type="button" class="toggle-respuestas-btn">Mostrar {{ comment.replies | length }} respuestas</button>
+                            <div class="replies hidden">
+                                {% for reply in comment.replies %}
+                                    <div class="reply" data-reply-id="{{ reply.id }}">
+                                        <p><strong>{{ reply.user.username }}:</strong> {{ reply.text }}</p>
+                                        <small>{{ reply.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                                        
+                                        <!-- Botón de like en la respuesta -->
+                                        {% if current_user in reply.likes %}
+                                            <button type="button" class="like-btn reply-like-btn liked">❤️ {{ reply.likes | length }}</button>
+                                        {% else %}
+                                            <button type="button" class="like-btn reply-like-btn">♡ {{ reply.likes | length }}</button>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                        {% endif %}
 
-                    <!-- Formulario para responder al comentario -->
-                    <form action="{{ url_for('responder_comentario', comment_id=comment.id) }}" method="post">
-                        <textarea name="response" placeholder="Responder al comentario..." required></textarea>
-                        <button type="submit">Responder</button>
-                    </form>
-                </div>
+                        <!-- Formulario para responder al comentario -->
+                        <form action="{{ url_for('responder_comentario', comment_id=comment.id) }}" method="post">
+                            <textarea name="response" placeholder="Responder al comentario..." required></textarea>
+                            <button type="submit">Responder</button>
+                        </form>
+                    </div>
                 {% endfor %}
             </section>            
         </main>

@@ -304,13 +304,22 @@ def Comentarios_likes(comment_id):
     with Session.begin() as session:
         comment = session.get(Comment, comment_id)
         user = session.get(User, current_user.id)
-        if not comment:
-            return "<h1>No hay comentarios</h1>"
-        if current_user in comment.likes:
+
+        if comment is None:
+            return "<h1>Respuesta no encontrada</h1>", 404
+
+        if user in comment.likes:
             comment.likes.remove(user)
+            return {
+                "liked": False,
+                "likes": len(comment.likes),
+            }, 200
         else:
             comment.likes.append(user)
-        return redirect(url_for("publicaciones", post_id=comment.post_id))
+            return {
+                "liked": True,
+                "likes": len(comment.likes),
+            }, 200
 
 
 @flask_app.route('/comment/<int:comment_id>/reply', methods=['POST'])
@@ -334,29 +343,28 @@ def responder_comentario(comment_id):
         return redirect(url_for('publicaciones', post_id=comentario.post_id))
 
 
-@flask_app.route("/likes_respuestas/<int:reply_id>/like_reply", methods=["POST"])
+@flask_app.route("/reply/<int:reply_id>/like", methods=["POST"])
 @login_required
 def likes_repuestas(reply_id):
     with Session.begin() as session:
-        reply = session.get(Reply, reply_id)  # Usar session.get en lugar de Reply.query.get_or_404
+        reply = session.get(Reply, reply_id)
+        user = session.get(User, current_user.id)
 
         if reply is None:
-            return "<h1>Respuesta no encontrada</h1>", 404  # Verificación si la respuesta no existe
+            return "<h1>Respuesta no encontrada</h1>", 404
 
-        # Verifica si el usuario ya le dio like a la respuesta
-        if current_user in reply.likes:
-            # Si ya le dio like, lo elimina
-            reply.likes.remove(current_user)
-            liked = False  # Indicador de que el like fue eliminado
+        if user in reply.likes:
+            reply.likes.remove(user)
+            return {
+                "liked": False,
+                "likes": len(reply.likes),
+            }, 200
         else:
-            # Si no, agrega el like
-            reply.likes.append(current_user)
-            liked = True  # Indicador de que el like fue agregado
-
-        session.commit()
-
-    # Redirige al post donde la respuesta fue dada
-    return redirect(url_for("publicaciones", post_id=reply.comment.post_id))  # Redirección al post correcto
+            reply.likes.append(user)
+            return {
+                "liked": True,
+                "likes": len(reply.likes),
+            }, 200
 
 
 @flask_app.route("/logout", methods=["POST"])
